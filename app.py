@@ -26,17 +26,6 @@ fig, ax = plt.subplots()
 df.plot(kind='line', ax=ax)
 st.pyplot(fig) 
 
-st.title('머신러닝 모델 배포')
-
-# 간단한 예측 기능
-input_data = st.text_input('입력 데이터를 제공하세요 (예: 5, 3, 2)')
-if input_data:
-    data = np.array([float(x) for x in input_data.split(',')]).reshape(1, -1)
-    model = RandomForestClassifier()
-    model.fit(data, [0])
-    prediction = model.predict(data)
-    st.write(f'예측 결과: {prediction[0]}')
-
 st.title('인터랙티브 데이터 분석 도구')
 
 # 데이터 로드

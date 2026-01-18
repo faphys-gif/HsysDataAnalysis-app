@@ -27,8 +27,8 @@ from langchain_core.messages import HumanMessage
 
 # --- 환경변수 로드 (선택) ---
 from dotenv import load_dotenv
-load_dotenv()
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+GEMINI_API_KEY = st.secrets("GEMINI_API_KEY")
 
 biz_id = 31
 
@@ -757,4 +757,5 @@ if __name__ == "__main__":
     
 
 #https://wikidocs.net/book/14285
+
 

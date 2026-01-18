@@ -6,3 +6,4 @@ plotly
 PyPDF2
 mysql-connector-python
 sqlalchemy
+seaborn

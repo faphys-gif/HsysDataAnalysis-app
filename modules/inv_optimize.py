@@ -636,7 +636,7 @@ def prc_pp81_simulation(biz_id, mat_code):
         host=DB_HOST,
         user=DB_USER,
         password=DB_PASSWORD,
-        database="DB_DATABASE
+        database=DB_DATABASE
     )
     cursor = conn.cursor(dictionary=True)
 
@@ -707,4 +707,5 @@ def plot_filtered_psi_simulation(sel_items):
     
     plt.tight_layout()
     return fig
+
 

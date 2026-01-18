@@ -26,22 +26,27 @@ SQL_SD02_DATA = \
     "inner join MM01 on MM01.mat_id = SD02.mat_id " \
     "group by sd02.mat_id; " \
 
+DB_USER = st.secrets["DB_USER"]
+DB_PASSWORD = st.secrets["DB_PASSWORD"]
+DB_HOST = st.secrets["DB_HOST"]
+DB_DATABASE = st.secrets["DB_DATABASE"]
+
 # MySQL 연결 정보
 db_info = {
-    "user": "faphys",
-    "password": "gktkdgns6281",
-    "host": "faphysdb.cmkxmjzufbmc.ap-northeast-2.rds.amazonaws.com",
+    "user": DB_USER,
+    "password": DB_PASSWORD,
+    "host": DB_HOST,
     "port": 3306,
-    "database": "faphysdb"
+    "database": DB_DATABASE
 }
 
 def connect_to_mysql():
     try:
         conn = mysql.connector.connect(
-            host="faphysdb.cmkxmjzufbmc.ap-northeast-2.rds.amazonaws.com",
-            user="faphys",
-            password="gktkdgns6281",
-            database="faphysdb"
+            host=DB_HOST,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_DATABASE
         )
 
         # 2. Create a cursor object
@@ -65,10 +70,10 @@ def connect_to_mysql():
 def update_data_in_mm17(updates):
     try:
         conn = mysql.connector.connect(
-            host="faphysdb.cmkxmjzufbmc.ap-northeast-2.rds.amazonaws.com",
-            user="faphys",
-            password="gktkdgns6281",
-            database="faphysdb"
+            host=DB_HOST,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_DATABASE
         )
 
         # 2. Create a cursor object
@@ -119,10 +124,10 @@ def clear_db_results(biz_id, mat_code):
     # 1. Establish the connection
     try:
         conn = mysql.connector.connect(
-            host="faphysdb.cmkxmjzufbmc.ap-northeast-2.rds.amazonaws.com",
-            user="faphys",
-            password="gktkdgns6281",
-            database="faphysdb"
+            host=DB_HOST,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_DATABASE
         )
 
         # 2. Create a cursor object
@@ -167,10 +172,10 @@ def clear_db_results(biz_id, mat_code):
 
 def prc_inv_optimize_in_mm16(biz_id):
     conn = mysql.connector.connect(
-        host="faphysdb.cmkxmjzufbmc.ap-northeast-2.rds.amazonaws.com",
-        user="faphys",
-        password="gktkdgns6281",
-        database="faphysdb"
+		host=DB_HOST,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        database=DB_DATABASE
     )
     cursor = conn.cursor(dictionary=True)
 
@@ -198,10 +203,10 @@ def load_dataset_sales_weekly(biz_id):
 def update_item_cluster(df):
     try:
         conn = mysql.connector.connect(
-            host="faphysdb.cmkxmjzufbmc.ap-northeast-2.rds.amazonaws.com",
-            user="faphys",
-            password="gktkdgns6281",
-            database="faphysdb"
+            host=DB_HOST,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_DATABASE
         )
 
         # 2. Create a cursor object
@@ -270,4 +275,5 @@ def load_dataset_mm17_stat(biz_id):
     df = pd.read_sql(SQL_STATMENT, con=engine)
     
     return df
+
 

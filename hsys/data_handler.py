@@ -4,10 +4,10 @@ import pandas as pd
 import mysql.connector
 from sqlalchemy import create_engine
 
-DB_USER = st.secrets("DB_USER")
-DB_PASSWORD = st.secrets("DB_PASSWORD")
-DB_HOST = st.secrets("DB_HOST")
-DB_DATABASE = st.secrets("DB_DATABASE")
+DB_USER = st.secrets["DB_USER"]
+DB_PASSWORD = st.secrets["DB_PASSWORD"]
+DB_HOST = st.secrets["DB_HOST"]
+DB_DATABASE = st.secrets["DB_DATABASE"]
 
 # MySQL 연결 정보
 db_info = {
@@ -99,3 +99,4 @@ def load_dataset_sales():
     
 
     return data_sales
+

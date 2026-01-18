@@ -33,7 +33,7 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 biz_id = 31
 
 st.set_page_config(page_title="AI Chatbot", layout="wide")
-font_path = "C:/Windows/Fonts/malgun.ttf"  # 맑은 고딕
+font_path = "Fonts/NANUMGOTHIC.TTF"  # 맑은 고딕
 #font_path = "/usr/share/fonts/truetype/nanum/NanumGothic.ttf" #Ubuntu
 
 # 폰트 이름 등록
@@ -757,3 +757,4 @@ if __name__ == "__main__":
     
 
 #https://wikidocs.net/book/14285
+

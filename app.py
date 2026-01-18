@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 from matplotlib import font_manager, rc
 import matplotlib.pyplot as plt
-from sklearn.ensemble import RandomForestClassifier
 import numpy as np
 import time
 

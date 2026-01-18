@@ -4,13 +4,18 @@ import pandas as pd
 import mysql.connector
 from sqlalchemy import create_engine
 
+DB_USER = st.secrets("DB_USER")
+DB_PASSWORD = st.secrets("DB_PASSWORD")
+DB_HOST = st.secrets("DB_HOST")
+DB_DATABASE = st.secrets("DB_DATABASE")
+
 # MySQL 연결 정보
 db_info = {
-    "user": "faphys",
-    "password": "gktkdgns6281",
-    "host": "faphysdb.cmkxmjzufbmc.ap-northeast-2.rds.amazonaws.com",
+    "user": DB_USER,
+    "password": DB_PASSWORD,
+    "host": DB_HOST,
     "port": 3306,
-    "database": "faphysdb"
+    "database": DB_DATABASE
 }
 
 SQL_STMT_TEXT = \
@@ -20,10 +25,10 @@ def load_dataset(bizId, dsCode):
 
     try:
         conn = mysql.connector.connect(
-            host="faphysdb.cmkxmjzufbmc.ap-northeast-2.rds.amazonaws.com",
-            user="faphys",
-            password="gktkdgns6281",
-            database="faphysdb"
+            host=DB_HOST,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_DATABASE
         )
 
         # 2. Create a cursor object
@@ -92,4 +97,5 @@ def load_dataset_sales():
     )
     data_sales = pd.read_sql(SQL_SALES_DATA, con=engine)
     
+
     return data_sales

@@ -589,6 +589,7 @@ def plot_inv_by_loc(data, items):
     filtered_data = data[data['Item Code'].isin(items)]
     inv_counts = filtered_data.groupby('Location')['재고량'].sum()
 
+    plt.rc('font', family='MalgunGothic')
     # 파이 차트 생성
     fig, ax = plt.subplots(figsize=(8, 5))
     ax.pie(
@@ -644,4 +645,5 @@ def plot_filtered_psi_by_daily(data, item):
     ax.grid(axis='y', linestyle='--', alpha=0.7)
     
     plt.tight_layout()
+
     return fig

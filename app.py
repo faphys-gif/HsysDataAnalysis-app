@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 
-font_path = "./Fonts/malgun.ttf"  # 맑은 고딕
+font_path = "./Fonts/MALGUN.TTF"  # 맑은 고딕
 
 # 폰트 이름 등록
 font_name = font_manager.FontProperties(fname=font_path).get_name()

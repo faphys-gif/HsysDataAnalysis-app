@@ -97,6 +97,4 @@ def load_dataset_sales():
     )
     data_sales = pd.read_sql(SQL_SALES_DATA, con=engine)
     
-
     return data_sales
-

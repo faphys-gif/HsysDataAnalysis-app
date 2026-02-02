@@ -34,7 +34,7 @@ biz_id = 31
 
 st.set_page_config(page_title="AI Chatbot", layout="wide")
 #font_path = "C:/Windows/Fonts/malgun.ttf"  # 맑은 고딕
-font_path = "./Fonts/malgun.ttf" #Ubuntu
+font_path = "./Fonts/MALGUN.TTF" #Ubuntu
 
 # 폰트 이름 등록
 font_name = font_manager.FontProperties(fname=font_path).get_name()
@@ -799,6 +799,7 @@ if __name__ == "__main__":
     
 
 #https://wikidocs.net/book/14285
+
 
 
 

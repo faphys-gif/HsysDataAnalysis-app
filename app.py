@@ -5,7 +5,7 @@ import matplotlib.font_manager as fm
 import numpy as np
 import time
 
-font_path = "/usr/share/fonts/truetype/nanum/NanumGothic.ttf"  # 맑은 고딕
+font_path = "./Fonts/NanumGothic-Regular.ttf"  # 맑은 고딕
 font_prop = fm.FontProperties(fname=font_path)
 
 # 폰트 이름 등록

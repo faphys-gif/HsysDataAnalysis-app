@@ -23,7 +23,7 @@ df = pd.read_csv('data/data.csv')
 # 데이터 시각화
 fig, ax = plt.subplots()
 plt.title(f"Korean 한글 제목 테스트(Test)", fontproperties=font_prop) 
-df.plot(kind='line', ax=ax)
+df.plot(kind='line', ax=a, fontproperties=font_propx)
 st.pyplot(fig) 
 
 st.title('인터랙티브 데이터 분석 도구')

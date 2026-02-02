@@ -11,8 +11,8 @@ from PyPDF2 import PdfReader
 
 import hsys.data_handler as dh
 import hsys.plot_graph as pg
-import modules.inv_optimize as invopt
-import modules.db_handler_mysql as db_mysql
+import hsys.inv_optimize as invopt
+import hsys.db_handler_mysql as db_mysql
 
 import google.generativeai as genai 
 from langchain_google_genai import ChatGoogleGenerativeAI , GoogleGenerativeAIEmbeddings
@@ -27,13 +27,13 @@ from langchain_core.messages import HumanMessage
 
 # --- 환경변수 로드 (선택) ---
 from dotenv import load_dotenv
-
+load_dotenv()
 GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
 
 biz_id = 31
 
 st.set_page_config(page_title="AI Chatbot", layout="wide")
-font_path = "Fonts/NANUMGOTHIC.TTF"  # 맑은 고딕
+font_path = "C:/Windows/Fonts/malgun.ttf"  # 맑은 고딕
 #font_path = "/usr/share/fonts/truetype/nanum/NanumGothic.ttf" #Ubuntu
 
 # 폰트 이름 등록
@@ -132,40 +132,48 @@ def main():
             st.write("#### Sales Data")
             
             if st.button("[판매]데이터 불러오기"):                                        
-                data_sales = dh.load_dataset(biz_id, 'DS_SALES') 
+                data_sales = dh.load_dataset(biz_id, 'DS_SALES')
 
                 customers = data_sales['고객명'].unique()
                 items = data_sales['제품코드'].unique()
             
+                #customers = st.multiselect(
+                #    "Choose Customers",
+                #    options=data_sales['고객명'].unique(),
+                #    default=data_sales['고객명'].unique()
+                # )
+
                 if not customers.any():
+                #if not customers:
                     st.error("Please select at least one Customer.")
                 else:
                     df = pd.DataFrame(data_sales)
-                    st.dataframe(df.head(30))
+                    
+                st.dataframe(df.head(30))
         
                 col1, col2 = st.columns(2)
                 
                 with col1:
-                    st.write("#### 주별 판매량 추이")
-                    filtered_sales_fig_by_daily = pg.plot_filtered_sales_by_daily(data_sales, customers)
-                    st.pyplot(filtered_sales_fig_by_daily)
-                    
                     st.write("#### 월별 판매량")
-                    filtered_sales_fig_by_month = pg.plot_filtered_sales_by_month(data_sales, customers)
-                    st.pyplot(filtered_sales_fig_by_month)   
+                    sales_fig_by_month = pg.plot_sales_by_month(data_sales, customers)
+                    st.pyplot(sales_fig_by_month) 
                     
-                    st.write("#### 요일별 판매량")
-                    filtered_sales_fig_by_weekday = pg.plot_filtered_sales_heatmap(data_sales, customers)
-                    st.pyplot(filtered_sales_fig_by_weekday)
-
-                with col2:
                     st.write("#### 고객별 판매량")
-                    filtered_sales_fig_by_item = pg.plot_filtered_sales_by_customer(data_sales, customers)
-                    st.pyplot(filtered_sales_fig_by_item)
+                    sales_fig_by_customer = pg.plot_sales_by_customer(data_sales, customers)
+                    st.pyplot(sales_fig_by_customer)
 
+                    st.write("#### 요일별 판매량")
+                    sales_fig_by_weekday = pg.plot_sales_by_weekday(data_sales, customers)
+                    st.pyplot(sales_fig_by_weekday)
+
+                with col2:                    
+                    st.write("#### 주별 판매량 추이")
+                    sales_fig_by_weekly = pg.plot_sales_by_weekly(data_sales, customers)
+                    st.pyplot(sales_fig_by_weekly)
+                    
                     st.write("#### 제품 그룹별 판매 비중")
-                    filtered_sales_fig_by_customer = pg.plot_filtered_sales_by_item(data_sales, items)
-                    st.pyplot(filtered_sales_fig_by_customer)               
+                    sales_fig_by_item = pg.plot_sales_by_item(data_sales, items)
+                    st.pyplot(sales_fig_by_item)               
             
         with tab2:
             st.write("#### Production Data")
@@ -197,83 +205,115 @@ def main():
                 col3, col4 = st.columns(2)
             
                 with col3:
-                    st.write("#### 주차별 생산량")
-                    filtered_production_fig_by_daily = pg.plot_filtered_production_by_daily(data_prods, machines)
-                    st.pyplot(filtered_production_fig_by_daily)
-                
                     st.write("#### 월별 생산량")
-                    filtered_production_fig_by_month = pg.plot_filtered_production_by_month(data_prods, machines)
-                    st.pyplot(filtered_production_fig_by_month)
+                    prod_fig_by_month = pg.plot_prod_by_month(data_prods, machines)
+                    st.pyplot(prod_fig_by_month)
                     
+                    st.write("#### 제품별 생산량")
+                    prod_fig_by_item = pg.plot_prod_by_item(data_prods, items)
+                    st.pyplot(prod_fig_by_item)
+
                     st.write("#### Heatmap By Machines")
-                    filtered_production_fig_by_mc = pg.plot_filtered_prod_heatmap(data_prods, machines)
-                    st.pyplot(filtered_production_fig_by_mc)
+                    prod_fig_by_mc_item = pg.plot_prod_heatmap(data_prods, machines)
+                    st.pyplot(prod_fig_by_mc_item)
                     
                 with col4:
-                    st.write("#### 제품별 생산량")
-                    filtered_production_fig_by_item = pg.plot_filtered_production_by_item(data_prods, items)
-                    st.pyplot(filtered_production_fig_by_item)
+                    st.write("#### 주차별 생산량")
+                    prod_fig_by_weekly = pg.plot_prod_by_weekly(data_prods, machines)
+                    st.pyplot(prod_fig_by_weekly)
                     
                     st.write("#### 생산설비별 생산 비중")
-                    filtered_production_fig_by_machine = pg.plot_filtered_production_by_machine(data_prods, machines)
-                    st.pyplot(filtered_production_fig_by_machine)
+                    prod_fig_by_machine = pg.plot_prod_by_machine(data_prods, machines)
+                    st.pyplot(prod_fig_by_machine)
     
         with tab3:
             st.write("#### 품질 데이터 분석")
         
             if st.button("[품질]데이터 불러오기"):                                        
-                data_quality = dh.load_dataset(biz_id, 'DS_QCS') 
+                data_quality = dh.load_dataset(biz_id, 'DS_QCS')
 
-                machines = st.multiselect(
-                    "Choose Machines",
-                    options=data_quality['Machine'].unique(),
-                    default=data_quality['Machine'].unique()
-                    )
+                machines = data_quality['생산설비'].unique()
+                items = data_quality['제품코드'].unique()
+
+                # machines = st.multiselect(
+                #     "Choose Machines",
+                #     options=data_quality['생산설비'].unique(),
+                #     default=data_quality['생산설비'].unique()
+                #     )
             
-                items = st.multiselect(
-                    "Choose Items[2]",
-                    options=data_quality['ItemCode'].unique(),
-                    default=data_quality['ItemCode'].unique()
-                    )
+                # items = st.multiselect(
+                #     "Choose Items",
+                #     options=data_quality['제품코드'].unique(),
+                #     default=data_quality['제품코드'].unique()
+                #     )
             
-                if not machines:
+                # if not machines:
+                #     st.error("Please select at least one Machine.")
+                if not machines.any():
                     st.error("Please select at least one Machine.")
                 else:
                     df_qc = pd.DataFrame(data_quality)
-                    st.dataframe(df_qc.head())
+                    st.dataframe(df_qc.head(30))
         
                 col5, col6 = st.columns(2)
                 
                 with col5:
-                    st.write("#### 일별 불량 발생 추이")
-                    filtered_quality_fig_by_daily = pg.plot_filtered_quality_by_daily(data_quality, machines)
-                    st.pyplot(filtered_quality_fig_by_daily)
+                    st.write("#### 월별 불량 발생 추이")
+                    qc_fig_by_month = pg.plot_qc_by_month(data_quality, machines)
+                    st.pyplot(qc_fig_by_month)
                 
                     st.write("#### 품목별 불량 수량")
-                    filtered_quality_fig_by_item = pg.plot_filtered_quality_by_item(data_quality, items)
-                    st.pyplot(filtered_quality_fig_by_item)
+                    qc_fig_by_item = pg.plot_qc_by_item(data_quality, items)
+                    st.pyplot(qc_fig_by_item)
 
                     st.write("#### Heatmap By Items and Ng Type")
-                    filtered_quality_fig_by_mc = pg.plot_filtered_quality_heatmap(data_quality, items)
-                    st.pyplot(filtered_quality_fig_by_mc)
+                    qc_fig_by_mc = pg.plot_qc_heatmap(data_quality, items)
+                    st.pyplot(qc_fig_by_mc)
 
                 with col6:
-                    st.write("#### Quality By NG Type")
-                    filtered_quality_fig_by_ngtype = pg.plot_filtered_quality_by_ngtype(data_quality, machines)
-                    st.pyplot(filtered_quality_fig_by_ngtype)
-                                
                     st.write("#### Quality By Machines")
-                    filtered_quality_fig_by_machine = pg.plot_filtered_quality_by_machine(data_quality, machines)
-                    st.pyplot(filtered_quality_fig_by_machine)
+                    qc_fig_by_machine = pg.plot_qc_by_machine(data_quality, machines)
+                    st.pyplot(qc_fig_by_machine)
+                     
+                    st.write("#### Quality By NG Type")
+                    qc_fig_by_ngtype = pg.plot_qc_by_ngtype(data_quality, machines)
+                    st.pyplot(qc_fig_by_ngtype)
+                                
+                    
                             
         with tab4:
             st.write("#### Purchaing Data")
 
             if st.button("[구매]데이터 불러오기"):                                        
                 data_purchasing = dh.load_dataset(biz_id, 'DS_POS') 
+                items = data_purchasing['ITEM_CODE'].unique()
 
-                df_pur = pd.DataFrame(data_purchasing)
-                st.dataframe(df_pur.head())
+                if not items.any():
+                    st.error("Please select at least one Item Code.")
+                else:
+                    df_pur = pd.DataFrame(data_purchasing)
+                    st.dataframe(df_pur.head())
+            
+                    col1, col2 = st.columns(2)
+                    
+                    with col1:
+                        st.write("#### 월별 구매량(Monthly Purchasing)")
+                        pur_fig_by_month = pg.plot_pur_by_month(data_purchasing, items)
+                        st.pyplot(pur_fig_by_month)
+                    
+                        st.write("#### 거래처별 구매량(Monthly Purchasing)")
+                        pur_fig_by_ptnr = pg.plot_pur_by_ptnr(data_purchasing, items)
+                        st.pyplot(pur_fig_by_ptnr)
+
+                    with col2:
+                        st.write("#### 품목별 구매 비중(Inventory ratio by Product)")
+                        pur_fig_by_item = pg.plot_pur_by_item(data_purchasing, items)
+                        st.pyplot(pur_fig_by_item)
+
+                        st.write("#### Heatmap By Items and Partner")
+                        pur_fig_by_ptnr_item = pg.plot_pur_heatmap(data_purchasing, items)
+                        st.pyplot(pur_fig_by_ptnr_item)
+
 
         with tab5:
             st.write("#### Inventory Data")
@@ -298,16 +338,17 @@ def main():
                     
                     with col1:
                         st.write("#### 월별 재고량(Monthly Inventory)")
-                        filtered_inv_fig_by_month = pg.plot_filtered_inv_by_month(data_inventory, items)
-                        st.pyplot(filtered_inv_fig_by_month)
+                        inv_fig_by_month = pg.plot_inv_by_month(data_inventory, items)
+                        st.pyplot(inv_fig_by_month)
                     
                         st.write("#### 월별 PSI(생산-판매-재고)")
-                        filtered_psi_fig_by_month = pg.plot_filtered_psi_by_month(data_inventory, items)
-                        st.pyplot(filtered_psi_fig_by_month)
+                        psi_fig_by_month = pg.plot_psi_by_month(data_inventory, items)
+                        st.pyplot(psi_fig_by_month)
                         
                         sel_item = st.multiselect(
                         "Choose Items",
-                        options=data_inventory['Item Code'].unique()
+                        options=data_inventory['Item Code'].unique(),
+                        default=data_inventory['Item Code'].unique()
                         )
 
                         st.write("#### 일별 PSI(생산-판매-재고)")
@@ -316,12 +357,12 @@ def main():
 
                     with col2:
                         st.write("#### 제품별 재고 비중(Inventory ratio by Product)")
-                        filtered_inv_fig_by_item = pg.plot_filtered_inv_by_item(data_inventory, items)
-                        st.pyplot(filtered_inv_fig_by_item)
+                        inv_fig_by_item = pg.plot_inv_by_item(data_inventory, items)
+                        st.pyplot(inv_fig_by_item)
 
                         st.write("#### Location별 재고 비중(Inventory ratio by Location)")
-                        filtered_inv_fig_by_loc = pg.plot_filtered_inv_by_loc(data_inventory, items)
-                        st.pyplot(filtered_inv_fig_by_loc)
+                        inv_fig_by_loc = pg.plot_inv_by_loc(data_inventory, items)
+                        st.pyplot(inv_fig_by_loc)
 
                 
     elif menu == "🧠데이터 분석(Q&A)":
@@ -457,7 +498,7 @@ def main():
         with tab2:  #Item Classification
             st.write("#### 판매 데이터 분석")
             df_sd02 = db_mysql.load_dataset_sales_weekly(biz_id)
-            st.dataframe(df_sd02.head())
+            st.dataframe(df_sd02.head(50))
 
             # 4. 저장 버튼 로직
             if st.button("아이템 분류(Item Classification)"):                                        
@@ -465,7 +506,7 @@ def main():
                 result = "아이템 분류 작업을 완료하였습니다."
                 st.success(f"결과: {result}")
 
-                st.dataframe(df_item_cluster.head())
+                st.dataframe(df_item_cluster.head(50))
                 db_mysql.update_item_cluster(df_item_cluster)
 
             # data_items = invopt.load_dataset_item()
@@ -482,7 +523,7 @@ def main():
                 if not item_classes:
                     st.error("Please select at least one Class.")
                 else:
-                    df_item_cluster_summary = db_mysql.load_dataset_mm17_stat(biz_id)
+                    df_item_cluster_summary = db_mysql.load_dataset_ml04_stat(biz_id)
                     st.dataframe(df_item_cluster_summary.head())
             
                 col1, col2 = st.columns(2)
@@ -757,6 +798,3 @@ if __name__ == "__main__":
     
 
 #https://wikidocs.net/book/14285
-
-
-

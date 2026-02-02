@@ -5,6 +5,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 
+font_path = "./Fonts/malgun.ttf"  # 맑은 고딕
+
+# 폰트 이름 등록
+font_name = font_manager.FontProperties(fname=font_path).get_name()
+rc('font', family=font_name)
+
 # ✅ ③ 음수(-) 기호 깨짐 방지
 plt.rcParams['axes.unicode_minus'] = False
 

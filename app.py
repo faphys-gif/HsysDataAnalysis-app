@@ -9,7 +9,7 @@ font_path = "./Fonts/NANUMGOTHIC.TTF"  # 맑은 고딕
 font_prop = fm.FontProperties(fname=font_path)
 
 # 폰트 이름 등록
-font_name = font_manager.FontProperties(fname=font_path).get_name()
+font_name = fm.FontProperties(fname=font_path).get_name()
 rc('font', family=font_name)
 
 plt.rc('font', family=font_name)

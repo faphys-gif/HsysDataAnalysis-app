@@ -10,7 +10,6 @@ font_prop = fm.FontProperties(fname=font_path)
 
 # 폰트 이름 등록
 font_name = fm.FontProperties(fname=font_path).get_name()
-st.title('Font Name:' + font_name)
 plt.rc('font', family=font_name)
 
 # ✅ ③ 음수(-) 기호 깨짐 방지
@@ -23,7 +22,7 @@ df = pd.read_csv('data/data.csv')
 
 # 데이터 시각화
 fig, ax = plt.subplots()
-plt.title("한글 제목 테스트")
+plt.title("한글 제목 테스트(Test)") 
 df.plot(kind='line', ax=ax)
 st.pyplot(fig) 
 

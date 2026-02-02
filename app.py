@@ -10,7 +10,6 @@ font_prop = fm.FontProperties(fname=font_path)
 
 # 폰트 이름 등록
 font_name = fm.FontProperties(fname=font_path).get_name()
-rc('font', family=font_name)
 
 plt.rc('font', family=font_name)
 # ✅ ③ 음수(-) 기호 깨짐 방지

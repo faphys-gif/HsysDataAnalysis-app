@@ -99,6 +99,7 @@ def main():
         'axes.titlesize': 10,    # 제목 크기
         'axes.labelsize': 10,    # 축 라벨 크기
         'legend.fontsize': 10,   # 범례 크기
+        'font': 'MalgunGothic',
     })
     
     #biz_id = st.sidebar.text_input("Biz ID를 입력하세요:", placeholder="예: 31")
@@ -799,6 +800,7 @@ if __name__ == "__main__":
     
 
 #https://wikidocs.net/book/14285
+
 
 
 

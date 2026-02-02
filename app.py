@@ -4,6 +4,11 @@ import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 import numpy as np
 import time
+import matplotlib as mpl
+import shutil
+
+# 캐시 디렉토리 삭제
+shutil.rmtree(mpl.get_cachedir())
 
 font_path = "./Fonts/NANUMGOTHIC.TTF"  # 맑은 고딕
 font_prop = fm.FontProperties(fname=font_path)

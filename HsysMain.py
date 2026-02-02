@@ -101,7 +101,7 @@ def main():
         'legend.fontsize': 10,   # 범례 크기
     })
     
-    biz_id = st.sidebar.text_input("Biz ID를 입력하세요:", placeholder="예: 31")
+    #biz_id = st.sidebar.text_input("Biz ID를 입력하세요:", placeholder="예: 31")
 
     menu = st.sidebar.selectbox(
         "원하는 기능을 선택하세요", 
@@ -799,6 +799,7 @@ if __name__ == "__main__":
     
 
 #https://wikidocs.net/book/14285
+
 
 
 

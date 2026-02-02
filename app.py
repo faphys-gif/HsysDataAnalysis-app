@@ -22,6 +22,7 @@ df = pd.read_csv('data/data.csv')
 
 # 데이터 시각화
 fig, ax = plt.subplots()
+plt.title("한글 제목 테스트")
 df.plot(kind='line', ax=ax)
 st.pyplot(fig) 
 

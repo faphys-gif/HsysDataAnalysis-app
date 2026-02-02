@@ -11,7 +11,7 @@ font_path = "./Fonts/NANUMGOTHIC.TTF"  # 맑은 고딕
 font_name = font_manager.FontProperties(fname=font_path).get_name()
 rc('font', family=font_name)
 
-plt.rc('font', family='NanumGothic')
+plt.rc('font', family=font_name)
 # ✅ ③ 음수(-) 기호 깨짐 방지
 plt.rcParams['axes.unicode_minus'] = False
 

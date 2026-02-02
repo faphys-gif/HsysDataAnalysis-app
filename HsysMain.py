@@ -39,6 +39,7 @@ font_path = "./Fonts/malgun.ttf" #Ubuntu
 # 폰트 이름 등록
 font_name = font_manager.FontProperties(fname=font_path).get_name()
 rc('font', family=font_name)
+plt.rc('font', family='MalgunGothic')
 
 # ✅ ③ 음수(-) 기호 깨짐 방지
 plt.rcParams['axes.unicode_minus'] = False
@@ -798,6 +799,7 @@ if __name__ == "__main__":
     
 
 #https://wikidocs.net/book/14285
+
 
 
 
